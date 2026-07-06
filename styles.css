@@ -1074,7 +1074,9 @@ h3 {
   }
 
   .button.light {
-    width: 70%;
+    width: 80%;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   .site-nav .nav-cta {
