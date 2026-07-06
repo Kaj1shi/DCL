@@ -856,7 +856,7 @@ h3 {
   display: grid;
   gap: 8px;
   color: var(--navy);
-  font-size: 0.94rem;
+  font-size: 1rem;
   font-weight: 800;
 }
 
@@ -884,6 +884,7 @@ h3 {
   box-shadow: 0 0 0 4px rgba(0, 114, 206, 0.12);
 }
 
+.contact-form service
 .contact-aside {
   display: grid;
   gap: 18px;
@@ -1070,6 +1071,10 @@ h3 {
     width: 60%;
     margin-right: auto;
     margin-left: auto;
+  }
+
+  .button.light {
+    width: 70%;
   }
 
   .site-nav .nav-cta {
