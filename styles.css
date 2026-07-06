@@ -884,7 +884,10 @@ h3 {
   box-shadow: 0 0 0 4px rgba(0, 114, 206, 0.12);
 }
 
-.contact-form service
+.contact-form select {
+  font-size: 1rem;
+}
+
 .contact-aside {
   display: grid;
   gap: 18px;
