@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
+  <body class="ibm-plex-sans-body">
     <header class="site-header">
       <a class="brand" href="index.html" aria-label="Drescher Consult Limited home">
         <span class="brand-mark">DCL</span>
@@ -29,37 +29,37 @@
 
     <main>
       <section class="page-hero">
-        <p class="breadcrumb">DCL / Contact</p>
-        <h1>Talk to Drescher Consult Limited.</h1>
-        <p>Send ICT product requirements, support needs, maintenance requests, or consultancy questions and the team will follow up with the right next step.</p>
+        <p class="breadcrumb reveal">DCL / Contact</p>
+        <h1 class="reveal">Talk to Drescher Consult Limited.</h1>
+        <p class="reveal">Send ICT product requirements, support needs, maintenance requests, or consultancy questions and the team will follow up with the right next step.</p>
       </section>
 
       <section class="section contact-layout">
-        <div class="contact-panel">
-          <p class="eyebrow">Contact form</p>
-          <h2>Request a consultation</h2>
+        <div class="contact-panel reveal">
+          <p class="eyebrow reveal">Contact form</p>
+          <h2 class="reveal">Request a consultation</h2>
           <form class="contact-form" action="mailto:piimasmith@gmail.com" method="post" enctype="text/plain">
             <div class="form-grid">
-              <label>
+              <label class="reveal">
                 Full name
                 <input name="name" type="text" autocomplete="name" required>
               </label>
-              <label>
+              <label class="reveal">
                 Organization
                 <input name="organization" type="text" autocomplete="organization">
               </label>
             </div>
             <div class="form-grid">
-              <label>
+              <label class="reveal">
                 Email address
                 <input name="email" type="email" autocomplete="email" required>
               </label>
-              <label>
+              <label class="reveal">
                 Phone number
                 <input name="phone" type="tel" autocomplete="tel">
               </label>
             </div>
-            <label>
+            <label class="reveal">
               Service interest
               <select name="service" required>
                 <option value="">Select a service</option>
@@ -72,7 +72,7 @@
                 <option>General Consultation</option>
               </select>
             </label>
-            <label>
+            <label class="reveal">
               Message
               <textarea name="message" rows="7" placeholder="Tell us about the ICT requirement, timeline, products, support needs, or service expectations." required></textarea>
             </label>
@@ -82,21 +82,21 @@
 
         <aside class="contact-aside" aria-label="Contact details">
           <div class="contact-card">
-            <p class="eyebrow">Office</p>
-            <h2>Kampala, Uganda</h2>
-            <p>Drescher Consult Limited supports government, NGOs, public and private companies, schools, hospitals, financial service organizations, and individual consumers across Uganda.</p>
+            <p class="eyebrow reveal">Office</p>
+            <h2 class="reveal">Kampala, Uganda</h2>
+            <p class="reveal">Drescher Consult Limited supports government, NGOs, public and private companies, schools, hospitals, financial service organizations, and individual consumers across Uganda.</p>
           </div>
           <div class="contact-card">
-            <p class="eyebrow">Email</p>
-            <a href="mailto:dcl@entebbe.eu">dcl@entebbe.eu</a>
+            <p class="eyebrow reveal">Email</p>
+            <a href="mailto:dcl@entebbe.eu" class="reveal">dcl@entebbe.eu</a>
           </div>
           <div class="contact-card">
-            <p class="eyebrow">telephone</p>
-            <a href="tel:+256414348990">+256 414 348 990</a>
+            <p class="eyebrow reveal">telephone</p>
+            <a href="tel:+256414348990" class="reveal">+256 414 348 990</a>
           </div>
           <div class="contact-card">
-            <p class="eyebrow">Response focus</p>
-            <p>ICT products, infrastructure solutions, networking, hardware and software maintenance, systems integration, IT audits, consultancy, installation, and managed services.</p>
+            <p class="eyebrow reveal">Response focus</p>
+            <p class="reveal">ICT products, infrastructure solutions, networking, hardware and software maintenance, systems integration, IT audits, consultancy, installation, and managed services.</p>
           </div>
         </aside>
       </section>
@@ -104,8 +104,8 @@
       <section class="section surface map-section">
         <div class="section-heading split">
           <div>
-            <p class="eyebrow">Map</p>
-            <h2>Find us in Kampala.</h2>
+            <p class="eyebrow reveal">Map</p>
+            <h2 class="reveal">Find us in Kampala.</h2>
           </div>
           <a class="text-link" href="https://www.openstreetmap.org/search?query=Kampala%2C%20Uganda" target="_blank" rel="noreferrer">Open map</a>
         </div>
@@ -121,27 +121,33 @@
 
     <footer class="site-footer">
       <div>
-        <a class="brand footer-brand" href="index.html"><span class="brand-mark">DCL</span><span class="brand-text">Drescher Consult Limited</span></a>
-        <p>ICT products, infrastructure solutions, maintenance, IT audits, installation, consultancy, and managed services for organizations that need reliable technology support.</p>
+        <a class="brand footer-brand" href="index.html"><span class="brand-mark reveal">DCL</span><span class="brand-text reveal">Drescher Consult Limited</span></a>
+        <p class="reveal">ICT products, infrastructure solutions, maintenance, IT audits, installation, consultancy, and managed services for organizations that need reliable technology support.</p>
       </div>
       <div>
-        <h2>Quick Links</h2>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="services.html">Services</a>
-        <a href="clients.html">Clients</a>
-        <a href="contact.html">Contact</a>
+        <h2 class="reveal">Quick Links</h2>
+        <a href="index.html" class="reveal">Home</a>
+        <a href="about.html" class="reveal">About</a>
+        <a href="services.html" class="reveal">Services</a>
+        <a href="clients.html" class="reveal">Clients</a>
+        <a href="contact.html" class="reveal">Contact</a>
       </div>
       <div>
-        <h2>Services</h2>
-        <a href="services.html#products">ICT Products</a>
-        <a href="services.html#infrastructure">Infrastructure Solutions</a>
-        <a href="services.html#support">Maintenance & Support</a>
-        <a href="services.html#managed">Managed Services</a>
-        <a href="services.html#audits">IT Audits & Consultancy</a>
+        <h2 class="reveal">Services</h2>
+        <a href="services.html#products" class="reveal">ICT Products</a>
+        <a href="services.html#infrastructure" class="reveal">Infrastructure Solutions</a>
+        <a href="services.html#support" class="reveal">Maintenance & Support</a>
+        <a href="services.html#managed" class="reveal">Managed Services</a>
+        <a href="services.html#audits" class="reveal">IT Audits & Consultancy</a>
       </div>
-      <p class="footer-copy">&copy; 2026 Drescher Consult Limited. All rights reserved.</p>
+      <p class="footer-copy reveal">&copy; 2026 Drescher Consult Limited. All rights reserved.</p>
     </footer>
+
+    <!-- STICKY ELEMENTS -->
+    <div class="sticky-cta">
+      <a href="https://wa.me/256751181323" class="wa-btn" target="_blank" title="Chat on WhatsApp">💬</a>
+    </div>
+
     <script src="script.js"></script>
   </body>
 </html>
