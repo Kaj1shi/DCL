@@ -1163,6 +1163,7 @@ h3 {
   .map-frame {
     aspect-ratio: 4 / 3;
     min-height: 300px;
+    width: 100%;
   }
 
   .team-card img {
