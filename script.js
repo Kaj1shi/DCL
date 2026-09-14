@@ -31,3 +31,40 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
   });
 });
+
+function animateStatCount(el) {
+  const target = Number(el.dataset.target);
+  if (!Number.isFinite(target)) return;
+
+  const suffix = el.dataset.suffix || "";
+  const duration = 2600;
+  const start = performance.now();
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    el.textContent = `${target}${suffix}`;
+    return;
+  }
+
+  function frame(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = `${Math.round(target * eased)}${suffix}`;
+    if (progress < 1) requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+
+const statCounts = document.querySelectorAll(".stat-count");
+if (statCounts.length) {
+  const statsObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.querySelectorAll(".stat-count").forEach(animateStatCount);
+      obs.unobserve(entry.target);
+    });
+  }, { threshold: 0.35 });
+
+  document.querySelectorAll(".stats-band").forEach((band) => statsObserver.observe(band));
+}

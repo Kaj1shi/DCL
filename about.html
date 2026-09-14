@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" href="assets/logo2.jpeg">
   </head>
 
-  <body class="ibm-plex-sans-body">
+  <body class="ibm-plex-sans-body page-compact">
     <header class="site-header">
       <a class="brand" href="index.html"><span class="brand-mark">DCL</span><span class="brand-text">Drescher Consult Limited</span></a>
       <button class="nav-toggle" type="button" aria-label="Open navigation" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -64,7 +64,7 @@
         </div>
       </section>
 
-      <section class="section surface">
+      <!-- <section class="section surface">
         <div class="section-heading">
           <p class="eyebrow reveal">Structure</p>
           <h2 class="reveal">Operational structure.</h2>
@@ -89,21 +89,34 @@
             <p class="reveal">Supports sales and marketing, office administration, stores, consumables, parts, and product availability.</p>
           </article>
         </div>
-      </section>
+      </section>  -->
 
       <section class="section certifications" id="contact">
         <div class="section-heading reveal">
           <p class="eyebrow reveal">Product partners</p>
           <h2 class="reveal">Technology partners that we are engaged with.</h2>
         </div>
-        <div class="badge-grid reveal">
-          <span>HP</span>
-          <span>Dell</span>
-          <span>Lenovo</span>
-          <span>APC</span>
-          <span>Tripp-Lite</span>
-          <span>Cisco</span>
-          <span>D-Link</span>
+        <div class="client-logo-carousel reveal" aria-label="Technology product partners">
+          <div class="client-logo-track">
+            <div class="client-logo-set">
+              <img src="assets/Product%20partners/hp.svg" alt="HP">
+              <img src="assets/Product%20partners/dell.png" alt="Dell">
+              <img src="assets/Product%20partners/lenovo.png" alt="Lenovo">
+              <img src="assets/Product%20partners/APC.png" alt="APC">
+              <img src="assets/Product%20partners/tripp-lite.png" alt="Tripp-Lite">
+              <img src="assets/Product%20partners/cisco.png" alt="Cisco">
+              <img src="assets/Product%20partners/d-link.png" alt="D-Link">
+            </div>
+            <div class="client-logo-set" aria-hidden="true">
+              <img src="assets/Product%20partners/hp.svg" alt="">
+              <img src="assets/Product%20partners/dell.png" alt="">
+              <img src="assets/Product%20partners/lenovo.png" alt="">
+              <img src="assets/Product%20partners/APC.png" alt="">
+              <img src="assets/Product%20partners/tripp-lite.png" alt="">
+              <img src="assets/Product%20partners/cisco.png" alt="">
+              <img src="assets/Product%20partners/d-link.png" alt="">
+            </div>
+          </div>
         </div>
       </section>
     </main>
@@ -134,7 +147,10 @@
 
     <!-- STICKY ELEMENTS -->
     <div class="sticky-cta">
-      <a href="https://wa.me/256751181323" class="wa-btn" target="_blank" title="Chat on WhatsApp">💬</a>
+      <a href="https://wa.me/256751181323" class="wa-btn" target="_blank" rel="noopener noreferrer" aria-label="Chat with us">
+        <span class="wa-btn-label">Chat with us</span>
+        <span class="wa-btn-icon" aria-hidden="true">💬</span>
+      </a>
     </div>
 
     <script src="script.js"></script>
