@@ -795,7 +795,7 @@ h3 {
 
 .page-compact .story-grid img {
   width: 100%;
-  max-width: 420px;
+  max-width: none;
   margin-left: auto;
   margin-right: auto;
   display: block;
@@ -1311,8 +1311,13 @@ h3 {
   }
 
   .hero-pair,
-  .story-grid {
+  .story-grid,
+  .page-compact .story-grid {
     grid-template-columns: 1fr;
+  }
+
+  .page-compact .story-grid img {
+    max-width: 100%;
   }
 
   .hero {
