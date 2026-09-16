@@ -1149,6 +1149,53 @@ h3 {
   resize: vertical;
 }
 
+.contact-form .form-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.contact-form .field-error {
+  color: var(--red);
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+.contact-form input.is-invalid,
+.contact-form select.is-invalid,
+.contact-form textarea.is-invalid {
+  border-color: var(--red);
+  box-shadow: 0 0 0 4px rgba(185, 0, 6, 0.12);
+}
+
+.form-status {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 650;
+}
+
+.form-status.is-error {
+  color: var(--red);
+  background: rgba(185, 0, 6, 0.08);
+  border: 1px solid rgba(185, 0, 6, 0.25);
+}
+
+.form-status.is-pending {
+  color: var(--navy);
+  background: rgba(0, 114, 206, 0.08);
+  border: 1px solid rgba(0, 114, 206, 0.22);
+}
+
+.form-status.is-success {
+  color: #0b6b3a;
+  background: rgba(3, 172, 19, 0.1);
+  border: 1px solid rgba(3, 172, 19, 0.28);
+}
+
 .contact-form input:focus,
 .contact-form select:focus,
 .contact-form textarea:focus {

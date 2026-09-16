@@ -40,30 +40,41 @@
         <div class="contact-panel reveal">
           <p class="eyebrow reveal">Contact form</p>
           <h2 class="reveal">Request a consultation</h2>
-          <form class="contact-form" action="mailto:piimasmith@gmail.com" method="post" enctype="text/plain">
+          <form class="contact-form" id="contact-form" action="https://formsubmit.io/piimasmith@gmail.com" method="POST" novalidate>
+            <input type="hidden" name="_subject" value="New consultation request — Drescher Consult Limited">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_next" value="">
+            <input type="text" name="_honey" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+            <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
+
             <div class="form-grid">
-              <label class="reveal">
+              <label>
                 Full name
-                <input name="name" type="text" autocomplete="name" required>
+                <input id="name" name="name" type="text" autocomplete="name" required minlength="2" maxlength="100">
+                <span class="field-error" data-error-for="name" hidden></span>
               </label>
-              <label class="reveal">
+              <label>
                 Organization
-                <input name="organization" type="text" autocomplete="organization">
+                <input id="organization" name="organization" type="text" autocomplete="organization" maxlength="120">
+                <span class="field-error" data-error-for="organization" hidden></span>
               </label>
             </div>
             <div class="form-grid">
-              <label class="reveal">
+              <label>
                 Email address
-                <input name="email" type="email" autocomplete="email" required>
+                <input id="email" name="email" type="email" autocomplete="email" required maxlength="120">
+                <span class="field-error" data-error-for="email" hidden></span>
               </label>
-              <label class="reveal">
+              <label>
                 Phone number
-                <input name="phone" type="tel" autocomplete="tel">
+                <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" pattern="^[+0-9][0-9\s\-()]{6,19}$" maxlength="20">
+                <span class="field-error" data-error-for="phone" hidden></span>
               </label>
             </div>
-            <label class="reveal">
+            <label>
               Service interest
-              <select name="service" required>
+              <select id="service" name="service" required>
                 <option value="">Select a service</option>
                 <option>ICT Products</option>
                 <option>Infrastructure Solutions</option>
@@ -73,10 +84,12 @@
                 <option>Installation Services</option>
                 <option>General Consultation</option>
               </select>
+              <span class="field-error" data-error-for="service" hidden></span>
             </label>
-            <label class="reveal">
+            <label>
               Message
-              <textarea name="message" rows="7" placeholder="Tell us about the ICT requirement, timeline, products, support needs, or service expectations." required></textarea>
+              <textarea id="message" name="message" rows="7" required minlength="20" maxlength="2000" placeholder="Tell us about the ICT requirement, timeline, products, support needs, or service expectations."></textarea>
+              <span class="field-error" data-error-for="message" hidden></span>
             </label>
             <button class="button primary" type="submit">Send Inquiry</button>
           </form>
