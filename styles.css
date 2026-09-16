@@ -147,12 +147,20 @@ h3 {
   border-radius: 25px;
   border: 2px solid rgba(255, 255, 255, 0.7);
   letter-spacing: 0;
+  text-decoration: none !important;
+}
+
+.site-nav a.nav-cta,
+.site-nav a.nav-cta:hover,
+.site-nav a.nav-cta[aria-current="page"] {
+  text-decoration: none !important;
+  text-decoration-line: none !important;
 }
 
 .nav-cta:hover {
   color: var(--navy) !important;
   background: var(--white);
-  text-decoration: none;
+  text-decoration: none !important;
   letter-spacing: 0;
   transform: translateY(-2px);
   box-shadow: 0 10px 22px rgba(6, 59, 122, 0.18);
@@ -1194,6 +1202,125 @@ h3 {
   color: #0b6b3a;
   background: rgba(3, 172, 19, 0.1);
   border: 1px solid rgba(3, 172, 19, 0.28);
+}
+
+
+.quote-intro {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.quote-form {
+  gap: 28px;
+}
+
+.quote-form .form-grid {
+  gap: 28px 24px;
+}
+
+.quote-form label {
+  gap: 12px;
+}
+
+.quote-form .quote-fieldset {
+  display: grid;
+  gap: 24px;
+  margin: 0;
+  padding: 28px 0 12px;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.quote-form .quote-fieldset:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.quote-fieldset legend {
+  padding: 0 0 12px;
+  margin: 0 0 8px;
+  color: var(--navy);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.quote-check-group {
+  display: grid;
+  gap: 14px;
+}
+
+.quote-check-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.optional-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 650;
+  white-space: nowrap;
+}
+
+.field-label {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+
+.quote-check-label {
+  margin: 0;
+  color: var(--navy);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.check-option {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 650;
+  background: #f8fbfd;
+  border: 1px solid #cddae4;
+  border-radius: 8px;
+}
+
+.check-option input {
+  width: auto;
+  min-height: 0;
+  margin: 0;
+  accent-color: var(--navy);
+}
+
+@media (max-width: 720px) {
+  .quote-check-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.quote-section {
+  display: flex;
+  justify-content: center;
+}
+
+.quote-panel {
+  width: min(100%, 920px);
+}
+
+.quote-banner {
+  margin: 0;
+  padding: 14px clamp(20px, 5vw, 72px);
+  color: #0b6b3a;
+  background: rgba(3, 172, 19, 0.12);
+  border-bottom: 1px solid rgba(3, 172, 19, 0.28);
+  font-weight: 700;
+  text-align: center;
 }
 
 .contact-form input:focus,
