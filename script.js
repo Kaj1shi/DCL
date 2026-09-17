@@ -146,71 +146,48 @@ function bindFieldValidation(form) {
   });
 }
 
-function getFormRecipient(form) {
-  if (form.dataset.recipient) return form.dataset.recipient.trim();
-  const action = form.getAttribute("action") || "";
-  const match = action.match(/formsubmit\.co\/(?:ajax\/)?([^/?#]+)/i);
-  if (match) return decodeURIComponent(match[1]);
-  return "";
+function ensureHiddenInput(form, name, value) {
+  let input = form.querySelector(`input[type="hidden"][name="${name}"]`);
+  if (!input) {
+    input = document.createElement("input");
+    input.type = "hidden";
+    input.name = name;
+    form.appendChild(input);
+  }
+  input.value = value;
+  return input;
 }
 
-async function submitWithFormSubmit({ form, statusEl, submitBtn, payload, successMessage }) {
-  const recipientEmail = getFormRecipient(form);
-  if (!recipientEmail) {
-    throw new Error("Missing recipient email in the form action URL.");
-  }
+function prepareFormSubmitExtras(form, subject) {
+  ensureHiddenInput(form, "_captcha", "false");
+  ensureHiddenInput(form, "_template", "table");
+  ensureHiddenInput(form, "_subject", subject);
+  ensureHiddenInput(
+    form,
+    "_next",
+    `${window.location.origin}${window.location.pathname}?submitted=1`
+  );
+}
 
-  if (window.location.protocol === "file:") {
-    throw new Error(
-      "FormSubmit cannot send emails from a local HTML file. Open the site through a web server (for example Live Server or python -m http.server), then try again."
-    );
-  }
-
-  statusEl.hidden = false;
-  statusEl.className = "form-status is-pending";
-  statusEl.textContent = "Submitting...";
-  if (submitBtn) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
-  }
-
-  const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      ...payload,
-      _captcha: "false",
-    }),
-  });
-
-  const result = await response.json().catch(() => ({}));
-  const failed =
-    !response.ok ||
-    result.success === "false" ||
-    result.success === false ||
-    result.success === 0;
-
-  if (failed) {
-    throw new Error(
-      result.message ||
-        `FormSubmit rejected the request (HTTP ${response.status}). Confirm the recipient inbox has activated FormSubmit.`
-    );
-  }
-
+function showSubmittedState(statusEl, submitBtn, message, buttonLabel) {
+  if (!statusEl) return;
   statusEl.hidden = false;
   statusEl.className = "form-status is-success";
-  statusEl.textContent = successMessage;
+  statusEl.textContent = message;
   if (submitBtn) {
     submitBtn.disabled = true;
-    submitBtn.textContent = "Submitted";
+    submitBtn.textContent = buttonLabel;
   }
+  if (window.history.replaceState) {
+    window.history.replaceState({}, "", window.location.pathname + window.location.hash);
+  }
+}
 
-  setTimeout(() => {
-    window.location.reload();
-  }, 2200);
+function handleSubmittedRedirect(statusEl, submitBtn, message, buttonLabel) {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("submitted") !== "1") return false;
+  showSubmittedState(statusEl, submitBtn, message, buttonLabel);
+  return true;
 }
 
 if (contactForm) {
@@ -218,11 +195,17 @@ if (contactForm) {
   const submitBtn = document.querySelector("#contact-submit");
   bindFieldValidation(contactForm);
 
-  contactForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  handleSubmittedRedirect(
+    statusEl,
+    submitBtn,
+    "Thank you. Your inquiry was submitted successfully.",
+    "Submitted"
+  );
 
+  contactForm.addEventListener("submit", (event) => {
     const firstInvalid = validateForm(contactForm);
     if (firstInvalid) {
+      event.preventDefault();
       statusEl.hidden = false;
       statusEl.className = "form-status is-error";
       statusEl.textContent = "Please fix the highlighted fields before sending.";
@@ -230,33 +213,22 @@ if (contactForm) {
       return;
     }
 
-    const payload = {
-      name: contactForm.elements.namedItem("name").value.trim(),
-      organization: contactForm.elements.namedItem("organization").value.trim() || "Not provided",
-      email: contactForm.elements.namedItem("email").value.trim(),
-      phone: contactForm.elements.namedItem("phone").value.trim() || "Not provided",
-      service: contactForm.elements.namedItem("service").value.trim(),
-      message: contactForm.elements.namedItem("message").value.trim(),
-      _subject: "New consultation request — Drescher Consult Limited",
-      _template: "table",
-    };
-
-    try {
-      await submitWithFormSubmit({
-        form: contactForm,
-        statusEl,
-        submitBtn,
-        payload,
-        successMessage: "Thank you. Your inquiry was submitted successfully.",
-      });
-    } catch (error) {
+    if (window.location.protocol === "file:") {
+      event.preventDefault();
       statusEl.hidden = false;
       statusEl.className = "form-status is-error";
-      statusEl.textContent = error?.message || "Sorry, we could not submit your inquiry. Please try again or email us directly.";
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Send Inquiry";
-      }
+      statusEl.textContent =
+        "FormSubmit cannot send emails from a local HTML file. Open the site through a web server, then try again.";
+      return;
+    }
+
+    prepareFormSubmitExtras(contactForm, "New consultation request — Drescher Consult Limited");
+    statusEl.hidden = false;
+    statusEl.className = "form-status is-pending";
+    statusEl.textContent = "Submitting...";
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
     }
   });
 }
@@ -335,11 +307,17 @@ if (quoteForm) {
     });
   });
 
-  quoteForm.addEventListener("submit", async (event) => {
-    event.preventDefault();
+  handleSubmittedRedirect(
+    statusEl,
+    submitBtn,
+    "Thank you. Your quote request was submitted successfully.",
+    "Submitted"
+  );
 
+  quoteForm.addEventListener("submit", (event) => {
     const firstInvalid = validateQuoteForm();
     if (firstInvalid) {
+      event.preventDefault();
       statusEl.hidden = false;
       statusEl.className = "form-status is-error";
       statusEl.textContent = "Please fix the highlighted fields before submitting.";
@@ -347,44 +325,28 @@ if (quoteForm) {
       return;
     }
 
+    if (window.location.protocol === "file:") {
+      event.preventDefault();
+      statusEl.hidden = false;
+      statusEl.className = "form-status is-error";
+      statusEl.textContent =
+        "FormSubmit cannot send emails from a local HTML file. Open the site through a web server, then try again.";
+      return;
+    }
+
+    // Collect checkbox brands into one field FormSubmit will email.
     const brands = Array.from(quoteForm.querySelectorAll('input[name="brands"]:checked'))
       .map((input) => input.value)
       .join(", ") || "Not specified";
+    ensureHiddenInput(quoteForm, "preferred_brands", brands);
 
-    const payload = {
-      name: quoteForm.elements.namedItem("name").value.trim(),
-      job_title: quoteForm.elements.namedItem("job_title").value.trim(),
-      organization: quoteForm.elements.namedItem("organization").value.trim(),
-      email: quoteForm.elements.namedItem("email").value.trim(),
-      phone: quoteForm.elements.namedItem("phone").value.trim(),
-      request_type: quoteForm.elements.namedItem("request_type").value.trim(),
-      service: quoteForm.elements.namedItem("service").value.trim(),
-      preferred_brands: brands,
-      quantity: quoteForm.elements.namedItem("quantity").value.trim(),
-      location: quoteForm.elements.namedItem("location").value.trim(),
-      timeline: quoteForm.elements.namedItem("timeline").value.trim(),
-      budget: quoteForm.elements.namedItem("budget").value.trim() || "Prefer not to say",
-      message: quoteForm.elements.namedItem("message").value.trim(),
-      _subject: "New quote request — Drescher Consult Limited",
-      _template: "table",
-    };
-
-    try {
-      await submitWithFormSubmit({
-        form: quoteForm,
-        statusEl,
-        submitBtn,
-        payload,
-        successMessage: "Thank you. Your quote request was submitted successfully.",
-      });
-    } catch (error) {
-      statusEl.hidden = false;
-      statusEl.className = "form-status is-error";
-      statusEl.textContent = error?.message || "Sorry, we could not submit your quote request. Please try again or email us directly.";
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Submit Quote Request";
-      }
+    prepareFormSubmitExtras(quoteForm, "New quote request — Drescher Consult Limited");
+    statusEl.hidden = false;
+    statusEl.className = "form-status is-pending";
+    statusEl.textContent = "Submitting...";
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
     }
   });
 }
