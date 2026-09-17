@@ -146,37 +146,79 @@ function bindFieldValidation(form) {
   });
 }
 
-function buildMailtoLink(form, recipientEmail, subjectPrefix) {
-  const name = form.elements.namedItem("name").value.trim();
-  const organization = form.elements.namedItem("organization").value.trim() || "Not provided";
-  const email = form.elements.namedItem("email").value.trim();
-  const phone = form.elements.namedItem("phone").value.trim() || "Not provided";
-  const service = form.elements.namedItem("service").value.trim();
-  const message = form.elements.namedItem("message").value.trim();
+function getFormRecipient(form) {
+  if (form.dataset.recipient) return form.dataset.recipient.trim();
+  const action = form.getAttribute("action") || "";
+  const match = action.match(/formsubmit\.co\/(?:ajax\/)?([^/?#]+)/i);
+  if (match) return decodeURIComponent(match[1]);
+  return "";
+}
 
-  const subject = `${subjectPrefix} from ${name}`;
-  const body = [
-    `${subjectPrefix} from the DCL website`,
-    "",
-    `Name: ${name}`,
-    `Organization: ${organization}`,
-    `Email: ${email}`,
-    `Phone: ${phone}`,
-    `Service interest: ${service}`,
-    "",
-    "Details:",
-    message,
-  ].join("\n");
+async function submitWithFormSubmit({ form, statusEl, submitBtn, payload, successMessage }) {
+  const recipientEmail = getFormRecipient(form);
+  if (!recipientEmail) {
+    throw new Error("Missing recipient email in the form action URL.");
+  }
 
-  return `mailto:${recipientEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  if (window.location.protocol === "file:") {
+    throw new Error(
+      "FormSubmit cannot send emails from a local HTML file. Open the site through a web server (for example Live Server or python -m http.server), then try again."
+    );
+  }
+
+  statusEl.hidden = false;
+  statusEl.className = "form-status is-pending";
+  statusEl.textContent = "Submitting...";
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+  }
+
+  const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      ...payload,
+      _captcha: "false",
+    }),
+  });
+
+  const result = await response.json().catch(() => ({}));
+  const failed =
+    !response.ok ||
+    result.success === "false" ||
+    result.success === false ||
+    result.success === 0;
+
+  if (failed) {
+    throw new Error(
+      result.message ||
+        `FormSubmit rejected the request (HTTP ${response.status}). Confirm the recipient inbox has activated FormSubmit.`
+    );
+  }
+
+  statusEl.hidden = false;
+  statusEl.className = "form-status is-success";
+  statusEl.textContent = successMessage;
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitted";
+  }
+
+  setTimeout(() => {
+    window.location.reload();
+  }, 2200);
 }
 
 if (contactForm) {
   const statusEl = document.querySelector("#form-status");
-  const recipientEmail = contactForm.dataset.recipient || "piimasmith@gmail.com";
+  const submitBtn = document.querySelector("#contact-submit");
   bindFieldValidation(contactForm);
 
-  contactForm.addEventListener("submit", (event) => {
+  contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const firstInvalid = validateForm(contactForm);
@@ -188,17 +230,40 @@ if (contactForm) {
       return;
     }
 
-    statusEl.hidden = false;
-    statusEl.className = "form-status is-success";
-    statusEl.textContent = "Opening your email app to send the inquiry...";
-    window.location.href = buildMailtoLink(contactForm, recipientEmail, "Consultation request");
+    const payload = {
+      name: contactForm.elements.namedItem("name").value.trim(),
+      organization: contactForm.elements.namedItem("organization").value.trim() || "Not provided",
+      email: contactForm.elements.namedItem("email").value.trim(),
+      phone: contactForm.elements.namedItem("phone").value.trim() || "Not provided",
+      service: contactForm.elements.namedItem("service").value.trim(),
+      message: contactForm.elements.namedItem("message").value.trim(),
+      _subject: "New consultation request — Drescher Consult Limited",
+      _template: "table",
+    };
+
+    try {
+      await submitWithFormSubmit({
+        form: contactForm,
+        statusEl,
+        submitBtn,
+        payload,
+        successMessage: "Thank you. Your inquiry was submitted successfully.",
+      });
+    } catch (error) {
+      statusEl.hidden = false;
+      statusEl.className = "form-status is-error";
+      statusEl.textContent = error?.message || "Sorry, we could not submit your inquiry. Please try again or email us directly.";
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send Inquiry";
+      }
+    }
   });
 }
 
 if (quoteForm) {
   const statusEl = document.querySelector("#quote-status");
   const submitBtn = document.querySelector("#quote-submit");
-  const recipientEmail = quoteForm.dataset.recipient || "piimasmith@gmail.com";
 
   const quoteValidators = {
     name: formValidators.name,
@@ -250,7 +315,6 @@ if (quoteForm) {
     Object.keys(quoteValidators).forEach((name) => {
       const field = quoteForm.elements.namedItem(name);
       if (!field || field instanceof RadioNodeList) {
-        // skip checkbox groups here
         const single = quoteForm.querySelector(`[name="${name}"]:not([type="checkbox"])`);
         if (!single) return;
         if (!validateQuoteField(single) && !firstInvalid) firstInvalid = single;
@@ -283,11 +347,6 @@ if (quoteForm) {
       return;
     }
 
-    statusEl.hidden = false;
-    statusEl.className = "form-status is-pending";
-    statusEl.textContent = "Submitting your quote request...";
-    if (submitBtn) submitBtn.disabled = true;
-
     const brands = Array.from(quoteForm.querySelectorAll('input[name="brands"]:checked'))
       .map((input) => input.value)
       .join(", ") || "Not specified";
@@ -311,33 +370,21 @@ if (quoteForm) {
     };
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(recipientEmail)}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
+      await submitWithFormSubmit({
+        form: quoteForm,
+        statusEl,
+        submitBtn,
+        payload,
+        successMessage: "Thank you. Your quote request was submitted successfully.",
       });
-
-      const result = await response.json().catch(() => ({}));
-
-      if (!response.ok || result.success === "false" || result.success === false) {
-        throw new Error(result.message || "Submission failed");
-      }
-
-      window.location.href = "index.html?quote=sent";
     } catch (error) {
       statusEl.hidden = false;
       statusEl.className = "form-status is-error";
-      statusEl.textContent = "Sorry, we could not submit your quote request. Please try again or email us directly.";
-      if (submitBtn) submitBtn.disabled = false;
+      statusEl.textContent = error?.message || "Sorry, we could not submit your quote request. Please try again or email us directly.";
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Submit Quote Request";
+      }
     }
   });
-}
-
-const quoteSuccessBanner = document.querySelector("#quote-success-banner");
-if (quoteSuccessBanner && new URLSearchParams(window.location.search).get("quote") === "sent") {
-  quoteSuccessBanner.hidden = false;
-  window.history.replaceState({}, "", window.location.pathname);
 }
