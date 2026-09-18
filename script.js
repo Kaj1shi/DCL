@@ -255,8 +255,7 @@ if (quoteForm) {
       }
       return "";
     },
-    request_type: (value) => (value ? "" : "Please select a request type."),
-    service: (value) => (value ? "" : "Please select a primary category."),
+    service: (value) => (value ? "" : "Please select a category."),
     quantity: (value) => {
       if (!value.trim()) return "Please estimate quantity, users, or sites.";
       return "";

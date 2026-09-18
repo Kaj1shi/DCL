@@ -80,34 +80,22 @@
 
             <fieldset class="quote-fieldset">
               <legend>What do you need quoted?</legend>
-              <div class="form-grid">
-                <label>
-                  Request type
-                  <select id="quote-request-type" name="request_type" required>
-                    <option value="">Select request type</option>
-                    <option>ICT Products only</option>
-                    <option>Services only</option>
-                    <option>Products and services</option>
-                  </select>
-                  <span class="field-error" data-error-for="request_type" hidden></span>
-                </label>
-                <label>
-                  Primary category
-                  <select id="quote-service" name="service" required>
-                    <option value="">Select a category</option>
-                    <option>ICT Products</option>
-                    <option>Infrastructure Solutions</option>
-                    <option>Networking</option>
-                    <option>Power / UPS</option>
-                    <option>Maintenance & Support</option>
-                    <option>Managed Services</option>
-                    <option>IT Audits & Consultancy</option>
-                    <option>Installation Services</option>
-                    <option>Mixed / Multiple categories</option>
-                  </select>
-                  <span class="field-error" data-error-for="service" hidden></span>
-                </label>
-              </div>
+              <label>
+                Category
+                <select id="quote-service" name="service" required>
+                  <option value="">Select a category</option>
+                  <option>ICT Products</option>
+                  <option>Infrastructure Solutions</option>
+                  <option>Networking</option>
+                  <option>Power / UPS</option>
+                  <option>Maintenance & Support</option>
+                  <option>Managed Services</option>
+                  <option>IT Audits & Consultancy</option>
+                  <option>Installation Services</option>
+                  <option>Mixed / Multiple categories</option>
+                </select>
+                <span class="field-error" data-error-for="service" hidden></span>
+              </label>
 
               <div class="quote-check-group" role="group" aria-labelledby="brands-label">
                 <p class="quote-check-label" id="brands-label">Preferred brands <span class="optional-note">(optional)</span></p>
